@@ -1,10 +1,14 @@
 import React from 'react';
+import Map from '../components/Map';
 
 const Home: React.FC = () => {
   return (
     <div className="page-content">
-      <h2>홈 페이지</h2>
-      <p>우리동네착한가게 홈 페이지입니다.</p>
+      {/* 지도 컴포넌트만 표시 */}
+      <Map 
+        center={{ lat: 37.5665, lng: 126.9780 }} // 서울 시청
+        zoom={15}
+      />
     </div>
   );
 };
