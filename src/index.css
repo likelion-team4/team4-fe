@@ -1,4 +1,6 @@
 /* ===== GLOBAL CSS SETTINGS ===== */
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
 /* CSS 변수 정의 */
 :root {
