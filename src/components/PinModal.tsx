@@ -1,6 +1,7 @@
 // src/components/PinModal.tsx
 import React, { useEffect, useRef, useState} from "react";
 import SuccessNotice from "./SuccessNotice";
+import FailureNotice from "./FailureNotice";
 
 interface PinModalProps {
   open: boolean;
@@ -93,16 +94,17 @@ const PinModal: React.FC<PinModalProps> = ({ open, onClose, children }) => {
           <SuccessNotice title="방문 인증" />
         </div>
 
-        {/* '저장하기' 버튼 바로 위에 */}
+        {/* '저장하기' 버튼 바로 위에 출력/미출력.
+        데이터를 제대로 받아왔다면 SuccessNotice 컴포넌트 렌더링. 제대로 못 받아왔다면 FailuteNotice 컴포넌트 렌더링. */}
         <div
           className={`
             pointer-events-none absolute mb-3 left-2 right-4 z-30
             bottom-[calc(68px+env(safe-area-inset-bottom))]  /* 12(하단) + 56(저장버튼) */
             transition-opacity duration-300
-            ${showSaveNotice ? "opacity-100" : "opacity-0"} z-[1120]
+            ${showSaveNotice ? "opacity-100" : "opacity-0"} z-[1120] 
           `}
         >
-          <SuccessNotice title="저장" />
+          <FailureNotice title="저장" /> 
         </div>
 
         {/* 플로팅 버튼 */}
