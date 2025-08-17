@@ -13,17 +13,20 @@ const Map: React.FC<MapProps> = ({
   const mapInstanceRef = useRef<any>(null);
 
   useEffect(() => {
-    // 네이버 지도 API 스크립트 로드
+    // 새로운 네이버 Maps API v3 스크립트 로드
     const loadNaverMap = () => {
       if (window.naver && window.naver.maps) {
         initializeMap();
       } else {
         const script = document.createElement('script');
-        script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_CLIENT_ID`;
+        script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${import.meta.env.VITE_NAVER_CLIENT_ID}`;
         script.onload = () => {
           if (window.naver && window.naver.maps) {
             initializeMap();
           }
+        };
+        script.onerror = () => {
+          console.error('네이버 지도 API 로드 실패');
         };
         document.head.appendChild(script);
       }
@@ -51,7 +54,11 @@ const Map: React.FC<MapProps> = ({
         clickableIcon: true
       };
 
-      mapInstanceRef.current = new window.naver.maps.Map(mapRef.current, mapOptions);
+      try {
+        mapInstanceRef.current = new window.naver.maps.Map(mapRef.current, mapOptions);
+      } catch (error) {
+        console.error('지도 초기화 실패:', error);
+      }
     };
 
     loadNaverMap();
@@ -59,7 +66,11 @@ const Map: React.FC<MapProps> = ({
     // 컴포넌트 언마운트 시 정리
     return () => {
       if (mapInstanceRef.current) {
-        mapInstanceRef.current.destroy();
+        try {
+          mapInstanceRef.current.destroy();
+        } catch (error) {
+          console.error('지도 정리 실패:', error);
+        }
       }
     };
   }, [center.lat, center.lng, zoom]);

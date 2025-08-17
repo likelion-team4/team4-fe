@@ -17,14 +17,22 @@ npm run dev
 ## 🗺️ 네이버 지도 API 설정
 
 1. **네이버 클라우드 플랫폼**에서 애플리케이션 등록
-2. **Maps** 서비스 활성화
-3. **Client ID** 발급받기
-4. `src/components/Map.tsx` 파일에서 `YOUR_CLIENT_ID` 부분을 실제 Client ID로 교체
+2. **AI NAVER API > Maps** 서비스 활성화 (신규 Maps API v3)
+3. **Client ID**와 **Client Secret** 발급받기
+4. 프로젝트 루트에 `.env` 파일 생성 후 API 키 설정
 
-```typescript
-// src/components/Map.tsx
-script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_ACTUAL_CLIENT_ID`;
+```bash
+# .env 파일
+VITE_NAVER_CLIENT_ID=your_client_id_here
+VITE_NAVER_CLIENT_SECRET=your_client_secret_here
 ```
+
+**⚠️ 보안 주의사항**: `.env` 파일은 `.gitignore`에 포함되어 있어 Git에 커밋되지 않습니다.
+
+**📋 API 변경사항**: 
+- 기존: `https://openapi.map.naver.com/openapi/v3/maps.js`
+- 신규: `https://oapi.map.naver.com/openapi/v3/maps.js`
+- 신규 Maps API v3 사용 (2024년 업데이트)
 
 ## 📁 프로젝트 구조
 
