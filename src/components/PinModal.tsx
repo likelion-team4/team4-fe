@@ -18,7 +18,6 @@ const PinModal: React.FC<PinModalProps> = ({ open, onClose, children }) => {
   }, [open, onClose]);
 
   return (
-    // 부모(.page-content)가 relative 여야 inset-0가 그 부모에 맞습니다.
     <div
       className={`absolute inset-0 ${open ? "pointer-events-auto" : "pointer-events-none"}`}
       aria-hidden={open ? "false" : "true"}
@@ -54,6 +53,25 @@ const PinModal: React.FC<PinModalProps> = ({ open, onClose, children }) => {
         <div className="flex-1 overflow-auto px-4 pb-6">
           {children}
         </div>
+
+        {/* 플로팅 버튼 */}
+        <div className="pointer-events-auto absolute left-4 right-4 bottom-[calc(12px+env(safe-area-inset-bottom))] z-30">
+          <div className="flex flex-col space-y-3">
+            <button
+              className="w-full h-14 rounded-2xl bg-cyan-500 text-white font-semibold shadow-lg hover:bg-cyan-600 active:scale-[0.99] transition"
+              // onClick={...}
+            >
+              방문 인증하기
+            </button>
+            <button
+              className="w-full h-14 rounded-2xl bg-gray-100 text-gray-900 font-semibold shadow-md hover:bg-gray-200 active:scale-[0.99] transition"
+              // onClick={...}
+            >
+              저장하기
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   );
