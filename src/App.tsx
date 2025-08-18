@@ -4,7 +4,6 @@ import Home from './pages/Home';
 import Search from './pages/Search';
 import SavedList from './pages/SavedList';
 import MyPage from './pages/MyPage';
-import CardNewsDetail from './pages/CardNewsDetail';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -13,8 +12,7 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <CardNewsDetail title="제목입니다." date="24.12.31" summary="여기는 이런 가게야.바고고고고고곡고고고고고고곡고고바고고곡고고고고고고고고곡고바고고곡고고고고고" 
-        body="문단을 \n 로 구분\n ss 안녕 \n d\nd\nd\nd\nd\nd\nd\nd\nd\n" />;
+        return <Home />;
       case 'search':
         return <Search />;
       case 'saved':
