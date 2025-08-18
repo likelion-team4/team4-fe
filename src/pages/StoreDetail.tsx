@@ -1,5 +1,3 @@
-import React from "react";
-
 export type StoreDetailProps = {
   name: string;
   category: string; // e.g., "한식 식당"
@@ -78,7 +76,7 @@ export default function StoreDetail({
   );
 }
 
-// ============ Demo Page ============
+// === 데모용 페이지 ===
 export function DemoStoreDetail() {
   return (
     <StoreDetail
