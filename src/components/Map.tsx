@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface MapProps {
   center?: { lat: number; lng: number };
@@ -11,8 +11,56 @@ const Map: React.FC<MapProps> = ({
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 사용자 위치 가져오기
+  const getUserLocation = (): Promise<{ lat: number; lng: number }> => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocation is not supported by this browser.'));
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          resolve({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error('위치 정보를 가져올 수 없습니다:', error);
+          reject(error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 300000 // 5분
+        }
+      );
+    });
+  };
 
   useEffect(() => {
+    // 사용자 위치 가져오기
+    const loadUserLocation = async () => {
+      try {
+        const location = await getUserLocation();
+        setUserLocation(location);
+        console.log('사용자 위치:', location);
+      } catch (error) {
+        console.log('기본 위치(서울 시청)를 사용합니다.');
+        setUserLocation(center);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadUserLocation();
+  }, [center]);
+
+  useEffect(() => {
+    if (isLoading) return; // 위치 로딩 중이면 지도 초기화하지 않음
+
     // 새로운 네이버 Maps API v3 스크립트 로드
     const loadNaverMap = () => {
       if (window.naver && window.naver.maps) {
@@ -36,8 +84,11 @@ const Map: React.FC<MapProps> = ({
     const initializeMap = () => {
       if (!mapRef.current || !window.naver || !window.naver.maps) return;
 
+      // 사용자 위치 또는 기본 위치 사용
+      const mapCenter = userLocation || center;
+
       const mapOptions = {
-        center: new window.naver.maps.LatLng(center.lat, center.lng),
+        center: new window.naver.maps.LatLng(mapCenter.lat, mapCenter.lng),
         zoom: zoom,
         mapTypeControl: true,
         mapTypeControlOptions: {
@@ -56,6 +107,15 @@ const Map: React.FC<MapProps> = ({
 
       try {
         mapInstanceRef.current = new window.naver.maps.Map(mapRef.current, mapOptions);
+        
+        // 사용자 위치에 마커 추가
+        if (userLocation) {
+          const marker = new window.naver.maps.Marker({
+            position: new window.naver.maps.LatLng(userLocation.lat, userLocation.lng),
+            map: mapInstanceRef.current,
+            title: '내 위치'
+          });
+        }
       } catch (error) {
         console.error('지도 초기화 실패:', error);
       }
@@ -73,10 +133,15 @@ const Map: React.FC<MapProps> = ({
         }
       }
     };
-  }, [center.lat, center.lng, zoom]);
+  }, [userLocation, center.lat, center.lng, zoom, isLoading]);
 
   return (
     <div className="map-container">
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="loading-text">위치 정보를 가져오는 중...</div>
+        </div>
+      )}
       <div 
         ref={mapRef} 
         className="naver-map"
@@ -93,6 +158,7 @@ declare global {
       maps: {
         Map: any;
         LatLng: any;
+        Marker: any;
         MapTypeControlStyle: any;
         ZoomControlStyle: any;
         Position: any;
