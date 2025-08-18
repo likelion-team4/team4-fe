@@ -22,7 +22,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh; /* 모바일에서 전체 화면 높이 사용 */
-  max-width: 480px; /* 모바일 최대 너비 제한 */
+  max-width: 720px; /* 모바일 최대 너비 제한 */
   margin: 0 auto; /* 중앙 정렬 */
   background-color: white;
   position: relative;
@@ -36,7 +36,7 @@ body {
   left: 50%;
   transform: translateX(-50%); /* 중앙 정렬을 위한 transform */
   width: 100%;
-  max-width: 480px; /* 모바일 최대 너비와 동일하게 제한 */
+  max-width: 720px; /* 모바일 최대 너비와 동일하게 제한 */
   height: 60px; /* 모바일 헤더 높이 */
   background-color: #4CAF50; /* 착한가게 테마 컬러 */
   color: white;
@@ -61,8 +61,8 @@ body {
 /* ===== 메인 콘텐츠 영역 ===== */
 .main-content {
   flex: 1; /* 남은 공간 모두 차지 */
-  margin-top: 60px; /* 헤더 높이만큼 상단 여백 */
-  margin-bottom: 80px; /* 네비바 높이만큼 하단 여백 */
+  /*margin-top: 60px; 헤더 높이만큼 상단 여백 */
+  /*margin-bottom: 80px; 네비바 높이만큼 하단 여백 */
   overflow: hidden; /* 부모 컨테이너에서 스크롤 방지 */
 }
 
@@ -70,7 +70,7 @@ body {
 .scrollable-content {
   height: 100%;
   overflow-y: auto; /* 세로 스크롤만 허용 */
-  padding: 16px; /* 모바일에서 적절한 내부 여백 */
+  /* padding: 16px; 모바일에서 적절한 내부 여백 */
   background-color: #ffffff; /* 흰색 배경 */
 }
 
@@ -81,7 +81,7 @@ body {
   left: 50%;
   transform: translateX(-50%); /* 중앙 정렬을 위한 transform */
   width: 100%;
-  max-width: 480px; /* 모바일 최대 너비와 동일하게 제한 */
+  max-width: 720px; /* 모바일 최대 너비와 동일하게 제한 */
   height: 80px; /* 모바일 네비바 높이 */
   background-color: white;
   border-top: 1px solid #e0e0e0; /* 상단 구분선 */
@@ -164,7 +164,7 @@ body {
   
   /* 앱 컨테이너를 모바일 앱처럼 보이게 설정 */
   .app {
-    border-radius: 20px; /* 둥근 모서리로 모바일 앱 느낌 */
+    border-radius: 0px; /* 둥근 모서리로 모바일 앱 느낌 */
     overflow: hidden; /* 둥근 모서리 적용을 위한 오버플로우 숨김 */
     height: 90vh; /* 화면 높이의 90% */
     max-height: 800px; /* 최대 높이 제한 */
@@ -179,25 +179,6 @@ body {
   .bottom-nav {
     border-radius: 0 0 20px 20px;
   }
-}
-
-/* ===== 스크롤바 커스터마이징 ===== */
-/* 웹킷 기반 브라우저 스크롤바 스타일링 */
-.scrollable-content::-webkit-scrollbar {
-  width: 6px; /* 스크롤바 너비 */
-}
-
-.scrollable-content::-webkit-scrollbar-track {
-  background: #f1f1f1; /* 스크롤바 트랙 배경 */
-}
-
-.scrollable-content::-webkit-scrollbar-thumb {
-  background: #c1c1c1; /* 스크롤바 썸 배경 */
-  border-radius: 3px; /* 스크롤바 썸 둥근 모서리 */
-}
-
-.scrollable-content::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8; /* 호버 시 스크롤바 썸 색상 */
 }
 
 /* ===== 페이지 콘텐츠 스타일 ===== */
