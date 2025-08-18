@@ -6,44 +6,51 @@ import welfareIcon from "../assets/복지실천.png";
 interface PlaceCardProps {
   name: string;
   address: string;
-  category: string;
+  category: "착한 가격" | "친환경" | "복지 실천";
   imageUrl: string;
+  onClick?: () => void;
 }
 
-const PlaceCard: React.FC<PlaceCardProps> = ({ name, address, category, imageUrl }) => {
-  // 카테고리 → 아이콘 매핑
-  const categoryIcons: Record<string, string> = {
-    "착한 가격": goodPriceIcon,
-    "친환경": ecoIcon,
-    "복지실천": welfareIcon,
-  };
-  
-  return (
-    <div className="flex items-center justify-between bg-white rounded-none shadow-md w-full h-40 px-15 
-    transition-all duration-300 hover:shadow-lg hover:bg-gray-50 hover:scale-[1.01] cursor-pointer">
-      {/* 왼쪽 텍스트 영역 */}
-      <div className="flex-1 min-w-0 text-left">
-        <h1 className="text-[25px] font-bold text-gray-900">{name}</h1>
-        <p className="text-[17px] text-sm text-gray-500 mt-2">{address}</p>
-        <div className="flex items-center mt-4 w-50">
-          {categoryIcons[category] && (
-            <div className="w-12 h-12 rounded-4xl">
-              <img src={categoryIcons[category]} alt={`${category} 아이콘`}></img>
-            </div>
-          )}
+const categoryIcons: Record<PlaceCardProps["category"], string> = {
+  "착한 가격": goodPriceIcon,
+  "친환경": ecoIcon,
+  "복지 실천": welfareIcon,
+};
 
-          <span className="text-[15px] inline-block text-gray-800 text-xs font-medium px-2 py-1">
-            {category}
-          </span>
+const PlaceCard: React.FC<PlaceCardProps> = ({
+  name,
+  address,
+  category,
+  imageUrl,
+  onClick,
+}) => {
+  return (
+    <div
+      onClick={onClick}
+      className="flex w-full items-center justify-between rounded-none bg-white px-4 py-3 h-36
+                  transition-all duration-200  hover:bg-gray-100 hover:scale-[1.01] cursor-pointer"
+    >
+      {/* 왼쪽 텍스트 */}
+      <div className="min-w-0 flex-1 text-left">
+        <h2 className="text-[25px] font-extrabold text-gray-900 truncate">{name}</h2>
+        <p className="mt-2 text-[17px] text-gray-500 truncate">{address}</p>
+
+        <div className="mt-4 flex items-center">
+          <img
+            src={categoryIcons[category]}
+            alt={`${category} 아이콘`}
+            className="h-8 w-8 rounded-full object-contain"
+          />
+          <span className="ml-3 text-[15px] font-medium text-gray-800">{category}</span>
         </div>
       </div>
 
       {/* 오른쪽 가게 이미지 */}
-      <div className="w-40 h-35 flex-shrink-0 translate-x-10">
+      <div className="ml-6 h-28 w-40 flex-shrink-0 translate-x-2">
         <img
           src={imageUrl}
           alt={name}
-          className="w-full h-full object-cover rounded-md"
+          className="h-full w-full rounded-lg object-cover"
         />
       </div>
     </div>
