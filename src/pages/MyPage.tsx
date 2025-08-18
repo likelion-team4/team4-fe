@@ -1,11 +1,13 @@
 import React from "react";
-import BadgeListRow from "../components/BadgeListRow";
-import VisitCountRow from "../components/VisitCountRow";
+import { useNavigate } from "react-router-dom"; 
+import BadgeListRow from "../components/my/BadgeListRow";
+import VisitCountRow from "../components/my/VisitCountRow";
 import profileImage from "../assets/profile.png";
 
 const MyPage: React.FC = () => {
   const userName = "사용자";
   const visits = 10;
+  const navigate = useNavigate();              
 
   return (
     <div className="w-full max-w-[720px] px-6 pt-10 mx-auto">
@@ -23,7 +25,7 @@ const MyPage: React.FC = () => {
 
       {/* 리스트 영역 */}
       <section className="mt-8 flex w-full flex-col items-stretch gap-4 text-left">
-        <BadgeListRow onClick={() => console.log("뱃지 목록으로 이동")} />
+        <BadgeListRow onClick={() => navigate("/badges")} /> 
         <VisitCountRow count={visits} />
       </section>
     </div>
