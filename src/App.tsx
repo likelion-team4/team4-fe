@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Search from './pages/Search';
 import SavedList from './pages/SavedList';
 import MyPage from './pages/MyPage';
+import { DemoStoreDetail } from './pages/StoreDetail';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -12,7 +13,7 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <Home />;
+        return <DemoStoreDetail />;
       case 'search':
         return <Search />;
       case 'saved':
