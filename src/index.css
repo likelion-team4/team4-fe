@@ -81,3 +81,13 @@ body {
     max-height: 800px; /* 최대 높이 제한 */
   }
 }
+
+/* 스크롤 바 안 보이게 설정 */
+.no-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;    
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; 
+}
