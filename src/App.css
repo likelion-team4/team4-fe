@@ -38,10 +38,10 @@ body {
   width: 100%;
   max-width: 720px; /* 모바일 최대 너비와 동일하게 제한 */
   height: 60px; /* 모바일 헤더 높이 */
-  background-color: #4CAF50; /* 착한가게 테마 컬러 */
+  background-color: #ffffff; /* 착한가게 테마 컬러 */
   color: white;
   z-index: 1000; /* 다른 요소들 위에 표시 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 헤더 그림자 */
+
 }
 
 .header-content {
@@ -61,8 +61,8 @@ body {
 /* ===== 메인 콘텐츠 영역 ===== */
 .main-content {
   flex: 1; /* 남은 공간 모두 차지 */
-  margin-top: 60px; /* 헤더 높이만큼 상단 여백 */
-  margin-bottom: 80px; /* 네비바 높이만큼 하단 여백 */
+  /*margin-top: 60px; 헤더 높이만큼 상단 여백 */
+  /*margin-bottom: 80px; 네비바 높이만큼 하단 여백 */
   overflow: hidden; /* 부모 컨테이너에서 스크롤 방지 */
 }
 
@@ -70,7 +70,7 @@ body {
 .scrollable-content {
   height: 100%;
   overflow-y: auto; /* 세로 스크롤만 허용 */
-  padding: 16px; /* 모바일에서 적절한 내부 여백 */
+  /* padding: 16px; 모바일에서 적절한 내부 여백 */
   background-color: #ffffff; /* 흰색 배경 */
 }
 
@@ -84,7 +84,6 @@ body {
   max-width: 720px; /* 모바일 최대 너비와 동일하게 제한 */
   height: 80px; /* 모바일 네비바 높이 */
   background-color: white;
-  border-top: 1px solid #e0e0e0; /* 상단 구분선 */
   display: flex;
   justify-content: space-around; /* 네비 아이템들을 균등 분배 */
   align-items: center;
@@ -164,40 +163,17 @@ body {
   
   /* 앱 컨테이너를 모바일 앱처럼 보이게 설정 */
   .app {
-    border-radius: 20px; /* 둥근 모서리로 모바일 앱 느낌 */
+    border-radius: 0px; /* 둥근 모서리로 모바일 앱 느낌 */
     overflow: hidden; /* 둥근 모서리 적용을 위한 오버플로우 숨김 */
     height: 90vh; /* 화면 높이의 90% */
     max-height: 800px; /* 최대 높이 제한 */
   }
   
-  /* 헤더 상단 모서리 둥글게 */
-  .header {
-    border-radius: 20px 20px 0 0;
-  }
   
   /* 네비바 하단 모서리 둥글게 */
   .bottom-nav {
     border-radius: 0 0 20px 20px;
   }
-}
-
-/* ===== 스크롤바 커스터마이징 ===== */
-/* 웹킷 기반 브라우저 스크롤바 스타일링 */
-.scrollable-content::-webkit-scrollbar {
-  width: 6px; /* 스크롤바 너비 */
-}
-
-.scrollable-content::-webkit-scrollbar-track {
-  background: #f1f1f1; /* 스크롤바 트랙 배경 */
-}
-
-.scrollable-content::-webkit-scrollbar-thumb {
-  background: #c1c1c1; /* 스크롤바 썸 배경 */
-  border-radius: 3px; /* 스크롤바 썸 둥근 모서리 */
-}
-
-.scrollable-content::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8; /* 호버 시 스크롤바 썸 색상 */
 }
 
 /* ===== 페이지 콘텐츠 스타일 ===== */

@@ -1,4 +1,6 @@
 /* ===== GLOBAL CSS SETTINGS ===== */
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
 /* CSS 변수 정의 */
 :root {
@@ -78,4 +80,14 @@ body {
     height: 90vh; /* 화면 높이의 90% */
     max-height: 800px; /* 최대 높이 제한 */
   }
+}
+
+/* 스크롤 바 안 보이게 설정 */
+.no-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;    
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; 
 }
