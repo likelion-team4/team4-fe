@@ -32,7 +32,7 @@ const BadgeCard: React.FC<Props> = ({
           "transition-all duration-200 ease-out will-change-transform",
           locked
             ? "grayscale opacity-70"
-            : "group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:scale-[1.02] group-hover:bg-yellow-300",
+            : "group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:scale-[1.02] group-hover:bg-[rgba(0,120,248,0.3)]",
           bgClassName,
         ].join(" ")}
       >

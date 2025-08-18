@@ -19,7 +19,7 @@ const badges = [
   { title: "복지 실천 1회", icon: <Heart className="h-10 w-10 text-pink-500" /> },
   { title: "복지 실천 3회", icon: <CheckCircle className="h-10 w-10 text-blue-500" /> },
   { title: "복지 실천 5회", icon: <Trophy className="h-10 w-10 text-amber-500" /> },
-  { title: "동네 토박이", icon: <Home className="h-10 w-10 text-yellow-600" />, bgClassName: "bg-yellow-50" },
+  { title: "동네 토박이", icon: <Home className="h-10 w-10 text-yellow-600" /> },
   { title: "동네 주민", locked: true },
   { title: "착한 가게 첫 방문", icon: <Store className="h-10 w-10 text-indigo-500" /> },
 ];
@@ -43,7 +43,6 @@ const BadgesPage: React.FC = () => {
             title={b.title}
             icon={b.icon}
             locked={!!b.locked}
-            bgClassName={b.bgClassName}
             onClick={handleBadgeClick} // 클릭 이벤트 연결
           />
         ))}

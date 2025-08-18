@@ -6,6 +6,7 @@ import SavedList from "./pages/SavedList";
 import MyPage from "./pages/MyPage";
 import { DemoStoreDetail } from "./pages/StoreDetail";
 import BadgesPage from "./pages/BadgesPage";
+import Logo from "./assets/logo.png";
 
 function BottomNav() {
   const { pathname } = useLocation();
@@ -52,8 +53,18 @@ export default function App() {
       <div className="app">
         {/* 고정 헤더 */}
         <header className="header">
-          <div className="header-content">
-            <h1 className="header-title">우리동네착한가게</h1>
+          <div className="header-content flex items-center justify-start gap-2 ml-3">
+            {/* 로고 */}
+            <img 
+              src={Logo}
+              alt="로고" 
+              className="h-6 w-6" 
+            />
+
+            {/* 타이틀 */}
+            <h1 className="text-[22px] font-bold text-black">
+              우리동네착한가게
+            </h1>
           </div>
         </header>
 
