@@ -35,7 +35,7 @@ function App() {
 
       {/* ===== 메인 콘텐츠 영역 ===== */}
       <main className="main-content">
-        <div className="scrollable-content">
+        <div className="scrollable-content no-scrollbar">
           {renderPage()}
         </div>
       </main>
