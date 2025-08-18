@@ -38,10 +38,10 @@ body {
   width: 100%;
   max-width: 720px; /* 모바일 최대 너비와 동일하게 제한 */
   height: 60px; /* 모바일 헤더 높이 */
-  background-color: #4CAF50; /* 착한가게 테마 컬러 */
+  background-color: #ffffff; /* 착한가게 테마 컬러 */
   color: white;
   z-index: 1000; /* 다른 요소들 위에 표시 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 헤더 그림자 */
+
 }
 
 .header-content {
@@ -84,7 +84,6 @@ body {
   max-width: 720px; /* 모바일 최대 너비와 동일하게 제한 */
   height: 80px; /* 모바일 네비바 높이 */
   background-color: white;
-  border-top: 1px solid #e0e0e0; /* 상단 구분선 */
   display: flex;
   justify-content: space-around; /* 네비 아이템들을 균등 분배 */
   align-items: center;
@@ -170,10 +169,6 @@ body {
     max-height: 800px; /* 최대 높이 제한 */
   }
   
-  /* 헤더 상단 모서리 둥글게 */
-  .header {
-    border-radius: 20px 20px 0 0;
-  }
   
   /* 네비바 하단 모서리 둥글게 */
   .bottom-nav {

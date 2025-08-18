@@ -21,7 +21,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({ name, address, category, imageUrl
   return (
     <div className="flex items-center justify-between bg-white rounded-none shadow-md w-full h-40 px-15 
     transition-all duration-300 hover:shadow-lg hover:bg-gray-50 hover:scale-[1.01] cursor-pointer">
-      {/* 왼쪽 텍스트 영역 (padding-left 추가) */}
+      {/* 왼쪽 텍스트 영역 */}
       <div className="flex-1 min-w-0 text-left">
         <h1 className="text-[25px] font-bold text-gray-900">{name}</h1>
         <p className="text-[17px] text-sm text-gray-500 mt-2">{address}</p>
