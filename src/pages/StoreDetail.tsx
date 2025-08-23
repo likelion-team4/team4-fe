@@ -1,3 +1,7 @@
+import React from "react";
+import { useParams } from "react-router-dom";
+import { mockStoreData } from "../data/mockData";
+
 export type StoreDetailProps = {
   name: string;
   category: string; // e.g., "한식 식당"
@@ -8,20 +12,25 @@ export type StoreDetailProps = {
   className?: string;
 };
 
-export default function StoreDetail({
-  name,
-  category,
-  heroUrl =
-    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1600&auto=format&fit=crop",
-  address,
-  phone,
-  hours,
-  className = "",
-}: StoreDetailProps) {
+export default function StoreDetail() {
+  const { storeId } = useParams<{ storeId: string }>();
   
+  // storeId가 없거나 해당하는 가게 데이터가 없으면 기본값 사용
+  const storeData = storeId ? mockStoreData[storeId] : mockStoreData.store1;
+  
+  if (!storeData) {
+    return (
+      <div className="min-h-[100svh] flex items-center justify-center">
+        <p>가게 정보를 찾을 수 없습니다.</p>
+      </div>
+    );
+  }
+
+  const { name, category, heroUrl, address, phone, hours } = storeData;
+
   return (
     <main
-      className={`min-h-[100svh] md:min-h-screen overflow-y-auto no-scrollbar bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 ${className}`}
+      className="min-h-[100svh] md:min-h-screen overflow-y-auto no-scrollbar bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
     >
       <div className="mx-auto w-full max-w-screen-sm px-4 pb-24 text-left mt-16 md:mt-8 lg:mt-6">
         {/* 헤더 */}
@@ -55,18 +64,18 @@ export default function StoreDetail({
 
         <section aria-label="Details" className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-950">
           <dl className="divide-y divide-neutral-200 dark:divide-neutral-800">
-            <div className="pt-0 grid grid-cols-[88px_1fr] items-center gap-4 py-3">
-              <dt className="text-green-800 text-xs md:text-sm">주소</dt>
+            <div className="grid grid-cols-[88px_1fr] items-start gap-4 py-3">
+              <dt className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400">주소</dt>
               <dd className="text-[15px] leading-7">{address}</dd>
             </div>
-            <div className="grid grid-cols-[88px_1fr] items-center gap-4 py-4">
-              <dt className="text-green-800 text-xs md:text-sm">전화번호</dt>
+            <div className="grid grid-cols-[88px_1fr] items-start gap-4 py-3">
+              <dt className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400">전화번호</dt>
               <dd className="text-[15px] leading-7">
                 {phone}
               </dd>
             </div>
-            <div className="pb-0 grid grid-cols-[88px_1fr] items-center gap-4 py-3">
-              <dt className="text-green-800 text-xs md:text-sm">운영시간</dt>
+            <div className="grid grid-cols-[88px_1fr] items-start gap-4 py-3">
+              <dt className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400">운영시간</dt>
               <dd className="text-[15px] leading-7 whitespace-pre-line">{hours}</dd>
             </div>
           </dl>
@@ -76,16 +85,7 @@ export default function StoreDetail({
   );
 }
 
-// === 데모용 페이지 ===
+// ============ Demo Page ============
 export function DemoStoreDetail() {
-  return (
-    <StoreDetail
-      name="신호등 찜닭"
-      category="한식 식당"
-      heroUrl="https://images.unsplash.com/photo-1625944528150-2f1a79c01a0c?q=80&w=1600&auto=format&fit=crop"
-      address="대구 북구 대현동 OO로 12"
-      phone="010.0000.0000"
-      hours={"월~금 : 11 AM - 10 PM"}
-    />
-  );
+  return <StoreDetail />;
 }
