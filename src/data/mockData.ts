@@ -24,7 +24,7 @@ export type NewsData = {
 export const mockStoreData: Record<string, StoreData> = {
   "store1": {
     id: "store1",
-    name: "신호등 찜닭",
+    name: "화랑 찜닭",
     category: "착한 가격",
     heroUrl: "https://images.unsplash.com/photo-1625944528150-2f80&w=1600&auto=format&fit=crop",
     address: "대구 북구 대현동 OO로 12",
