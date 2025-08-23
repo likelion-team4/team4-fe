@@ -1,4 +1,3 @@
-import React from "react";
 import PlaceCard from "../components/PlaceCard";
 import store1 from "../assets/store1.png";
 import store2 from "../assets/store2.png";
@@ -7,18 +6,21 @@ import store3 from "../assets/store3.png";
 // 저장된 가게 더미 데이터 (추후 서버/로컬스토리지 연동)
 const savedPlaces = [
   {
+    id: "saved1", // id 추가
     name: "신호등 찜닭",
     address: "대구 북구 대현동 OO로 12",
     category: "착한 가격" as const,
     imageUrl: store1,
   },
   {
+    id: "saved2", // id 추가
     name: "맛있닭 치킨",
     address: "대구 북구 대현동 OO로 20",
     category: "친환경" as const,
     imageUrl: store2,
   },
   {
+    id: "saved3", // id 추가
     name: "썬더 닭강정",
     address: "대구 북구 대현동 OO로 125",
     category: "복지 실천" as const,
@@ -35,7 +37,8 @@ const SavedList: React.FC = () => {
         <div className="flex flex-col gap-6">
           {savedPlaces.map((place) => (
             <PlaceCard
-              key={place.name}
+              key={place.id} // key를 id로 변경
+              id={place.id} // id prop 추가
               name={place.name}
               address={place.address}
               category={place.category}
