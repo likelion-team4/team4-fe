@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   const storeData = [
     {
       id: "store1",
-      name: "신호등 찜닭",
+      name: "화랑 찜닭",
       address: "대구 북구 대현동 OO로 12",
       category: "착한 가격" as const,
       imageUrl: store1

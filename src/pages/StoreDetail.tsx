@@ -1,22 +1,99 @@
 import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { mockStoreData } from "../data/mockData";
 
-export type StoreDetailProps = {
+// API 응답 타입 정의
+export type StoreApiResponse = {
+  id: number;
   name: string;
-  category: string; // e.g., "한식 식당"
-  heroUrl?: string; // 대표 이미지 URL
+  categories: string[];
+  certifications: Array<{ source: string }>;
   address: string;
-  phone: string; // "010.0000.0000" 등, 표시용 문자열
-  hours: string; // "월~금 : 11 AM - 10 PM"
-  className?: string;
+  phone: string;
+  lat: number;
+  lon: number;
+  score: number;
+  cardnews: unknown[];
+};
+
+// 카테고리 한글 매핑
+const categoryMapping: Record<string, string> = {
+  "good_price": "착한 가격",
+  "eco_friendly": "친환경",
+  "welfare": "복지 실천"
 };
 
 export default function StoreDetail() {
   const { storeId } = useParams<{ storeId: string }>();
+  const [storeData, setStoreData] = useState<StoreApiResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
-  // storeId가 없거나 해당하는 가게 데이터가 없으면 기본값 사용
-  const storeData = storeId ? mockStoreData[storeId] : mockStoreData.store1;
+  // store_id 2082를 사용해서 API 요청
+  const targetStoreId = "2082";
   
+  useEffect(() => {
+    const fetchStoreData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await fetch(`/api/stores/${targetStoreId}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data: StoreApiResponse = await response.json();
+        setStoreData(data);
+      } catch (err) {
+        console.error('가게 정보를 가져오는데 실패했습니다:', err);
+        setError('가게 정보를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.');
+        
+        // API 실패 시 mockData 사용 (fallback)
+        if (storeId && mockStoreData[storeId]) {
+          setStoreData(mockStoreData[storeId] as unknown as StoreApiResponse);
+        } else {
+          setStoreData(mockStoreData.store1 as unknown as StoreApiResponse);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStoreData();
+  }, [storeId, targetStoreId]);
+  
+  // 로딩 상태
+  if (loading) {
+    return (
+      <div className="min-h-[100svh] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-neutral-600 dark:text-neutral-400">가게 정보를 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  // 에러 상태
+  if (error && !storeData) {
+    return (
+      <div className="min-h-[100svh] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            다시 시도
+          </button>
+        </div>
+      </div>
+    );
+  }
+  
+  // storeData가 없으면 기본값 사용
   if (!storeData) {
     return (
       <div className="min-h-[100svh] flex items-center justify-center">
@@ -25,7 +102,13 @@ export default function StoreDetail() {
     );
   }
 
-  const { name, category, heroUrl, address, phone, hours } = storeData;
+  const { name, categories, certifications, address, phone, score } = storeData;
+  
+  // 카테고리 한글 변환
+  const categoryDisplay = categories.map(cat => categoryMapping[cat] || cat).join(", ");
+  
+  // 기본 이미지 URL (heroUrl이 없으므로 기본 이미지 사용)
+  const defaultImageUrl = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1600&auto=format&fit=crop";
 
   return (
     <main
@@ -37,15 +120,22 @@ export default function StoreDetail() {
           <h1 className="pt-3 text-2xl font-semibold leading-snug tracking-[-0.02em] md:text-[28px]">
             {name}
           </h1>
-          <span className="text-neutral-700 dark:text-neutral-200 break-words pl-1">
-              {category}
-          </span>
+          <div className="flex flex-wrap gap-2 mt-2">
+            <span className="text-neutral-700 dark:text-neutral-200 break-words pl-1">
+              {categoryDisplay}
+            </span>
+            {score && (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                점수: {score}
+              </span>
+            )}
+          </div>
         </header>
 
         {/* 대표 이미지 */}
         <figure className="mb-6 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm dark:border-neutral-800 dark:bg-neutral-950">
           <img
-            src={heroUrl}
+            src={defaultImageUrl}
             alt={`${name} 대표 이미지`}
             className="aspect-[16/9] w-full object-cover"
             loading="lazy"
@@ -73,10 +163,18 @@ export default function StoreDetail() {
                 {phone}
               </dd>
             </div>
-            <div className="grid grid-cols-[88px_1fr] items-start gap-4 py-3">
-              <dt className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400">운영시간</dt>
-              <dd className="text-[15px] leading-7 whitespace-pre-line">{hours}</dd>
-            </div>
+            {certifications && certifications.length > 0 && (
+              <div className="grid grid-cols-[88px_1fr] items-start gap-4 py-3">
+                <dt className="text-xs md:text-sm text-neutral-500 dark:text-neutral-400">인증</dt>
+                <dd className="text-[15px] leading-7">
+                  {certifications.map((cert, index) => (
+                    <span key={index} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 mr-2">
+                      {cert.source}
+                    </span>
+                  ))}
+                </dd>
+              </div>
+            )}
           </dl>
         </section>
       </div>
