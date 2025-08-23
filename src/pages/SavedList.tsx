@@ -1,4 +1,6 @@
+
 import React, { useState } from "react";
+
 import PlaceCard from "../components/PlaceCard";
 import PinModal from "../components/PinModal";
 import type { StoreData } from "../data/mockData";
