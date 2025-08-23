@@ -4,8 +4,6 @@ import PlaceCard from '../components/PlaceCard';
 import { mockStoreData } from '../data/mockData';
 import type { StoreData } from '../data/mockData';
 import store1 from '../assets/store1.png';
-import store2 from '../assets/store2.png';
-import store3 from '../assets/store3.png';
 
 const Home: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
