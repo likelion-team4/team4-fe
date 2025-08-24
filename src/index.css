@@ -1,4 +1,6 @@
 /* ===== GLOBAL CSS SETTINGS ===== */
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
 /* CSS 변수 정의 */
 :root {
@@ -74,8 +76,18 @@ body {
   /* 앱 컨테이너를 모바일 크기로 제한하여 중앙에 배치 */
   #root {
     width: 100%;
-    max-width: 600px; /* 모바일 최대 너비로 제한 */
+    max-width: 720px; /* 앱 최대 너비를 720px로 설정 */
     height: 90vh; /* 화면 높이의 90% */
     max-height: 800px; /* 최대 높이 제한 */
   }
+}
+
+/* 스크롤 바 안 보이게 설정 */
+.no-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;    
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; 
 }
