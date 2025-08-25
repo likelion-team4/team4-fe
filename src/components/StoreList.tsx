@@ -247,7 +247,7 @@ const StoreList: React.FC<StoreListProps> = ({
 
             {/* 평점 (우하단) */}
             <div className="absolute bottom-3 right-3 z-10 text-xs text-white drop-shadow">
-              {'⭐'.repeat(store.rating)}
+              {'⭐'.repeat(store.rating/20)}
             </div>
           </div>
         ))}

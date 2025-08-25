@@ -50,9 +50,45 @@ const Map: React.FC<MapProps> = ({
     });
   };
 
-  // API에서 가게 데이터 가져오기 (더미)
+  // API에서 가게 데이터 가져오기
   const fetchStores = async (category: string = 'all') => {
     try {
+      console.log('🏪 API에서 가게 데이터 가져오기 시작');
+      
+      // API 엔드포인트 URL
+      const apiUrl = category === 'all' 
+        ? 'http://43.201.148.58:5000/stores'
+        : `http://43.201.148.58:5000/stores?categories=${category}`;
+      
+      console.log('🔗 API URL:', apiUrl);
+      
+      const response = await fetch(apiUrl);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const storesData = await response.json();
+      console.log('✅ API 응답 데이터:', storesData);
+      
+      // API 응답 데이터를 Store 타입으로 변환
+      const stores: Store[] = storesData.map((store: any) => ({
+        id: store.id,
+        name: store.name,
+        lat: store.lat,
+        lon: store.lon,
+        score: store.score,
+        categories: store.categories
+      }));
+      
+      setStores(stores);
+      addStoreMarkers(stores);
+      
+    } catch (error) {
+      console.error('❌ API 데이터 가져오기 실패:', error);
+      
+      // API 실패 시 더미 데이터 사용 (fallback)
+      console.log('⚠️ 더미 데이터로 fallback');
       const dummyStores: Store[] = [
         { id: 1, name: '종이밥',     lat: 37.5665, lon: 126.9780, score: 4.5, categories: ['good-price'] },
         { id: 2, name: '덤브치킨',   lat: 37.5668, lon: 126.9785, score: 4.2, categories: ['eco-friendly'] },
@@ -68,13 +104,6 @@ const Map: React.FC<MapProps> = ({
 
       setStores(filtered);
       addStoreMarkers(filtered);
-    } catch (e) {
-      console.error('가게 데이터 로드 실패:', e);
-      const fallback: Store[] = [
-        { id: 1, name: '종이밥', lat: 37.5665, lon: 126.9780, score: 4.5, categories: ['good-price'] },
-      ];
-      setStores(fallback);
-      addStoreMarkers(fallback);
     }
   };
 
@@ -90,18 +119,27 @@ const Map: React.FC<MapProps> = ({
       const marker = new window.naver.maps.Marker({
         position: new window.naver.maps.LatLng(store.lat, store.lon),
         map: mapInstanceRef.current,
-        title: store.name,
         icon: {
           content: `
             <div style="
-              background:#4CAF50;color:#fff;padding:8px 12px;border-radius:20px;
-              font-size:12px;font-weight:700;box-shadow:0 2px 4px rgba(0,0,0,.3);
-              white-space:nowrap;">
-              ${store.name}
+              width: 20px;
+              height: 20px;
+              background: #4CAF50;
+              border: 2px solid white;
+              border-radius: 50%;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-size: 10px;
+              font-weight: bold;
+            ">
+              📍
             </div>
           `,
-          size: new window.naver.maps.Size(0, 0),
-          anchor: new window.naver.maps.Point(0, 0),
+          size: new window.naver.maps.Size(20, 20),
+          anchor: new window.naver.maps.Point(10, 10),
         },
       });
 
@@ -110,7 +148,7 @@ const Map: React.FC<MapProps> = ({
           content: `
             <div style="padding:10px;min-width:200px;">
               <h3 style="margin:0 0 8px;color:#333;">${store.name}</h3>
-              <p style="margin:0 0 5px;color:#666;">평점: ${'⭐'.repeat(Math.floor(store.score))} ${store.score}</p>
+              <p style="margin:0 0 5px;color:#666;">평점: ${'⭐'.repeat(Math.floor(store.score/20))}</p>
               <p style="margin:0;color:#666;">카테고리: ${store.categories.join(', ')}</p>
             </div>
           `,
