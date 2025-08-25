@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import type { StoreData } from '../data/mockData';
 
 interface Store {
   id: number;
@@ -13,12 +14,14 @@ interface MapProps {
   center?: { lat: number; lng: number };
   zoom?: number;
   selectedCategory?: string;
+  onPinModalOpen?: (store: StoreData | Store) => void;
 }
 
 const Map: React.FC<MapProps> = ({
   center = { lat: 37.5665, lng: 126.9780 }, // 서울 시청 기본 위치
   zoom = 15,
   selectedCategory = 'all',
+  onPinModalOpen
 }) => {
   // 컴포넌트 시작 시 환경 변수 확인
   console.log('🗺️ Map 컴포넌트 시작');
@@ -86,24 +89,12 @@ const Map: React.FC<MapProps> = ({
       
     } catch (error) {
       console.error('❌ API 데이터 가져오기 실패:', error);
+      console.error('❌ 에러 상세:', error);
       
-      // API 실패 시 더미 데이터 사용 (fallback)
-      console.log('⚠️ 더미 데이터로 fallback');
-      const dummyStores: Store[] = [
-        { id: 1, name: '종이밥',     lat: 37.5665, lon: 126.9780, score: 4.5, categories: ['good-price'] },
-        { id: 2, name: '덤브치킨',   lat: 37.5668, lon: 126.9785, score: 4.2, categories: ['eco-friendly'] },
-        { id: 3, name: '신호등찜닭', lat: 37.5662, lon: 126.9775, score: 4.7, categories: ['welfare'] },
-        { id: 4, name: '맛있닭',     lat: 37.5670, lon: 126.9790, score: 4.3, categories: ['good-price', 'eco-friendly'] },
-        { id: 5, name: '행컵',       lat: 37.5660, lon: 126.9770, score: 4.6, categories: ['welfare', 'eco-friendly'] },
-        { id: 6, name: '착한카페',   lat: 37.5672, lon: 126.9788, score: 4.4, categories: ['good-price', 'welfare'] },
-      ];
-
-      const filtered = category === 'all'
-        ? dummyStores
-        : dummyStores.filter(s => s.categories.includes(category));
-
-      setStores(filtered);
-      addStoreMarkers(filtered);
+      // API 실패 시 빈 배열로 설정 (더미 데이터 사용하지 않음)
+      console.log('⚠️ API 실패로 인해 가게 데이터를 표시할 수 없습니다.');
+      setStores([]);
+      addStoreMarkers([]);
     }
   };
 
@@ -143,17 +134,16 @@ const Map: React.FC<MapProps> = ({
         },
       });
 
+      // 마커 클릭 이벤트
       window.naver.maps.Event.addListener(marker, 'click', () => {
-        const infoWindow = new window.naver.maps.InfoWindow({
-          content: `
-            <div style="padding:10px;min-width:200px;">
-              <h3 style="margin:0 0 8px;color:#333;">${store.name}</h3>
-              <p style="margin:0 0 5px;color:#666;">평점: ${'⭐'.repeat(Math.floor(store.score/20))}</p>
-              <p style="margin:0;color:#666;">카테고리: ${store.categories.join(', ')}</p>
-            </div>
-          `,
-        });
-        infoWindow.open(mapInstanceRef.current, marker);
+        console.log('🔴 핀 클릭됨:', store.name, 'ID:', store.id);
+        
+        if (onPinModalOpen) {
+          console.log('✅ PinModal 열기 시도 - API 데이터 전달');
+          onPinModalOpen(store); // API 데이터를 그대로 전달
+        } else {
+          console.log('❌ onPinModalOpen prop이 없음');
+        }
       });
 
       markersRef.current.push(marker);

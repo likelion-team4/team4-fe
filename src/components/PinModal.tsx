@@ -10,10 +10,20 @@ import store1 from "../assets/store1.png";
 import store2 from "../assets/store2.png";
 import store3 from "../assets/store3.png";
 
+// API에서 받아오는 가게 데이터 타입
+interface ApiStoreData {
+  id: number;
+  name: string;
+  lat: number;
+  lon: number;
+  score: number;
+  categories: string[];
+}
+
 interface PinModalProps {
   open: boolean;
   onClose: () => void;
-  selectedStore?: StoreData;
+  selectedStore?: StoreData | ApiStoreData;
   children?: React.ReactNode;
 }
 
@@ -37,6 +47,16 @@ const PinModal: React.FC<PinModalProps> = ({ open, onClose, selectedStore, child
     setShowSaveNotice(true);
     if (saveTimerRef.current) window.clearTimeout(saveTimerRef.current);
     saveTimerRef.current = window.setTimeout(() => setShowSaveNotice(false), 1000);
+  };
+
+  // API 카테고리를 UI 카테고리로 매핑
+  const mapApiCategoryToUICategory = (apiCategory: string): "착한 가격" | "친환경" | "복지 실천" => {
+    switch (apiCategory) {
+      case "good-price": return "착한 가격";
+      case "eco-friendly": return "친환경";
+      case "welfare": return "복지 실천";
+      default: return "착한 가격";
+    }
   };
 
   // 가게 이미지 매핑
@@ -99,26 +119,59 @@ const PinModal: React.FC<PinModalProps> = ({ open, onClose, selectedStore, child
         <div className="flex-1 overflow-auto px-4 pb-6">
           {selectedStore ? (
             <div className="space-y-4">
-              {/* 첫 번째: 가게 정보 (PlaceCard) */}
-              <PlaceCard
-                id={selectedStore.id}
-                name={selectedStore.name}
-                address={selectedStore.address}
-                category={selectedStore.category} // 직접 사용
-                imageUrl={getStoreImage(selectedStore.id)}
-              />
-              
-              {/* 두 번째부터: 해당 가게의 뉴스들 (NewsCard) */}
-              {mockNewsData[selectedStore.id]?.map((news) => (
-                <NewsCard
-                  key={news.id}
-                  id={news.id}
-                  title={news.title}
-                  content={news.content}
-                  postDate={news.postDate}
-                  imageUrl={news.imageUrl}
+              {/* API 데이터인지 기존 StoreData인지 확인 */}
+              {'lat' in selectedStore ? (
+                // API 데이터인 경우
+                <PlaceCard
+                  id={`store${selectedStore.id}`}
+                  name={selectedStore.name}
+                  address={`${selectedStore.lat}, ${selectedStore.lon}`}
+                  category={mapApiCategoryToUICategory(selectedStore.categories[0])}
+                  imageUrl={getStoreImage(`store${selectedStore.id}`)}
                 />
-              ))}
+              ) : (
+                // 기존 StoreData인 경우
+                <PlaceCard
+                  id={selectedStore.id}
+                  name={selectedStore.name}
+                  address={selectedStore.address}
+                  category={selectedStore.category}
+                  imageUrl={getStoreImage(selectedStore.id)}
+                />
+              )}
+              
+              {/* 뉴스 카드들 - API 데이터의 경우 임시 뉴스 표시 */}
+              {'lat' in selectedStore ? (
+                // API 데이터인 경우 임시 뉴스 표시
+                <div className="space-y-4">
+                  <NewsCard
+                    id="temp-news-1"
+                    title="착한가게 인증 완료"
+                    content={`${selectedStore.name}이(가) 착한가게로 인증되었습니다.`}
+                    postDate="2024.01.15"
+                    imageUrl="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1600&auto=format&fit=crop"
+                  />
+                  <NewsCard
+                    id="temp-news-2"
+                    title="평점 정보"
+                    content={`현재 평점: ${'⭐'.repeat(Math.floor(selectedStore.score))} ${selectedStore.score}`}
+                    postDate="2024.01.10"
+                    imageUrl="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1600&auto=format&fit=crop"
+                  />
+                </div>
+              ) : (
+                // 기존 StoreData인 경우 기존 뉴스 표시
+                mockNewsData[selectedStore.id]?.map((news) => (
+                  <NewsCard
+                    key={news.id}
+                    id={news.id}
+                    title={news.title}
+                    content={news.content}
+                    postDate={news.postDate}
+                    imageUrl={news.imageUrl}
+                  />
+                ))
+              )}
             </div>
           ) : (
             children
