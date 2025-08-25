@@ -20,6 +20,11 @@ const Map: React.FC<MapProps> = ({
   zoom = 15,
   selectedCategory = 'all',
 }) => {
+  // 컴포넌트 시작 시 환경 변수 확인
+  console.log('🗺️ Map 컴포넌트 시작');
+  console.log('🔍 VITE_NAVER_CLIENT_ID:', import.meta.env.VITE_NAVER_CLIENT_ID);
+  console.log('🔍 import.meta.env:', import.meta.env);
+  
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -134,12 +139,31 @@ const Map: React.FC<MapProps> = ({
 
   // 네이버 지도 로드 & 초기화
   useEffect(() => {
-    if (isLoading) return;
+    console.log('🔍 Map 컴포넌트 useEffect 시작');
+    console.log('🔍 isLoading 상태:', isLoading);
+    
+    if (isLoading) {
+      console.log('⏳ 위치 정보 로딩 중이므로 지도 초기화 건너뜀');
+      return;
+    }
 
     const initMap = () => {
-      if (!mapRef.current || !window.naver || !window.naver.maps) return;
+      console.log('🗺️ initMap 함수 시작');
+      console.log('🔍 mapRef.current:', mapRef.current);
+      console.log('🔍 window.naver:', window.naver);
+      console.log('🔍 window.naver.maps:', window.naver?.maps);
+      
+      if (!mapRef.current || !window.naver || !window.naver.maps) {
+        console.error('❌ 지도 초기화 실패: mapRef 또는 naver maps가 없음');
+        console.error('❌ mapRef.current:', mapRef.current);
+        console.error('❌ window.naver:', window.naver);
+        console.error('❌ window.naver.maps:', window.naver?.maps);
+        return;
+      }
 
       const mapCenter = userLocation || center;
+      console.log('📍 지도 중심점:', mapCenter);
+      
       const mapOptions = {
         center: new window.naver.maps.LatLng(mapCenter.lat, mapCenter.lng),
         zoom,
@@ -154,14 +178,18 @@ const Map: React.FC<MapProps> = ({
       };
 
       try {
+        console.log('🗺️ 지도 인스턴스 생성 시도...');
+        console.log('🔍 mapOptions:', mapOptions);
         mapInstanceRef.current = new window.naver.maps.Map(mapRef.current, mapOptions);
+        console.log('✅ 지도 인스턴스 생성 성공!');
+        console.log('🔍 mapInstanceRef.current:', mapInstanceRef.current);
 
         // 내 위치 마커
         if (userLocation) {
+          console.log('📍 내 위치 마커 추가:', userLocation);
           new window.naver.maps.Marker({
             position: new window.naver.maps.LatLng(userLocation.lat, userLocation.lng),
             map: mapInstanceRef.current,
-            title: '내 위치',
             icon: {
               content: `
                 <div style="
@@ -178,34 +206,120 @@ const Map: React.FC<MapProps> = ({
         }
 
         // 매장 로드
+        console.log('🏪 매장 데이터 로드 시작');
         fetchStores(selectedCategory);
       } catch (e) {
-        console.error('지도 초기화 실패:', e);
+        console.error('❌ 지도 초기화 실패:', e);
+        console.error('❌ 에러 상세:', (e as Error).message);
+        console.error('❌ 에러 스택:', (e as Error).stack);
       }
     };
 
     const loadScript = () => {
+      console.log('📜 loadScript 함수 시작');
+      
       if (window.naver && window.naver.maps) {
+        console.log('✅ 네이버 지도 API 이미 로드됨');
         initMap();
         return;
       }
+      
+      console.log('📥 네이버 지도 API 스크립트 로드 시작...');
       const script = document.createElement('script');
-      // NOTE: ncpClientId 사용
-      script.src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${import.meta.env.VITE_NAVER_CLIENT_ID}`;
+      
+      // 실제 환경 변수에서 API 키 읽기
+      const apiKey = import.meta.env.VITE_NAVER_CLIENT_ID || 'g9fajjfgo5';
+      console.log('🔑 === API 키 디버깅 ===');
+      console.log('🔑 import.meta.env.VITE_NAVER_CLIENT_ID:', import.meta.env.VITE_NAVER_CLIENT_ID);
+      console.log('🔑 최종 사용할 API 키:', apiKey);
+      console.log('🔑 API 키 확인:', apiKey ? '설정됨' : '설정되지 않음');
+      console.log('🔑 ======================');
+      
+      // 직접 API 키 사용
+      const finalApiKey = 'g9fajjfgo5';
+      console.log('🔑 최종 사용할 API 키 (Client ID):', finalApiKey);
+      
+      // 지도 로딩 직전 VITE_NAVER_CLIENT_ID 로그
+      console.log('🔍 === 지도 로딩 직전 환경 변수 확인 ===');
+      console.log('🔍 VITE_NAVER_CLIENT_ID:', import.meta.env.VITE_NAVER_CLIENT_ID);
+      console.log('🔍 VITE_NAVER_CLIENT_ID 타입:', typeof import.meta.env.VITE_NAVER_CLIENT_ID);
+      console.log('🔍 VITE_NAVER_CLIENT_ID 길이:', import.meta.env.VITE_NAVER_CLIENT_ID?.length);
+      console.log('🔍 VITE_NAVER_CLIENT_ID === undefined:', import.meta.env.VITE_NAVER_CLIENT_ID === undefined);
+      console.log('🔍 VITE_NAVER_CLIENT_ID === null:', import.meta.env.VITE_NAVER_CLIENT_ID === null);
+      console.log('🔍 VITE_NAVER_CLIENT_ID === ""', import.meta.env.VITE_NAVER_CLIENT_ID === "");
+      console.log('🔍 ======================================');
+      
+      if (!finalApiKey) {
+        console.log('⚠️ API 키가 없습니다.');
+        return;
+      }
+      
+      const scriptUrl = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${finalApiKey}`;
+      console.log('🔗 스크립트 URL:', scriptUrl);
+      script.src = scriptUrl;
       script.async = true;
-      script.onload = () => (window.naver && window.naver.maps ? initMap() : null);
-      script.onerror = () => console.error('네이버 지도 API 로드 실패');
+      
+      script.onload = () => {
+        console.log('✅ 네이버 지도 API 스크립트 로드 성공');
+        console.log('🔍 window.naver:', window.naver);
+        console.log('🔍 window.naver.maps:', window.naver?.maps);
+        
+        if (window.naver && window.naver.maps) {
+          console.log('✅ window.naver.maps 확인됨, initMap 호출');
+          initMap();
+        } else {
+          console.error('❌ 네이버 지도 API 로드 후에도 window.naver.maps가 없음');
+          console.error('❌ window.naver:', window.naver);
+        }
+      };
+      
+      script.onerror = (error) => {
+        console.error('❌ 네이버 지도 API 로드 실패:', error);
+        console.error('❌ 에러 상세:', error);
+        // API 로드 실패 시 대체 UI 표시
+        if (mapRef.current) {
+          mapRef.current.innerHTML = `
+            <div style="
+              display: flex; 
+              align-items: center; 
+              justify-content: center; 
+              height: 100%; 
+              background: #f0f0f0; 
+              color: #666;
+              font-size: 14px;
+              text-align: center;
+              padding: 20px;
+            ">
+              <div>
+                <div style="font-size: 24px; margin-bottom: 10px;">🗺️</div>
+                <div>지도를 불러올 수 없습니다.</div>
+                <div style="font-size: 12px; margin-top: 5px; color: #ff6b6b;">
+                  .env 파일에 VITE_NAVER_CLIENT_ID를 설정해주세요.
+                </div>
+                <div style="font-size: 10px; margin-top: 5px; color: #999;">
+                  현재 API 키: ${finalApiKey}
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      };
+      
+      console.log('📜 스크립트를 DOM에 추가');
       document.head.appendChild(script);
     };
 
+    console.log('🚀 loadScript 호출');
     loadScript();
 
     return () => {
+      console.log('🧹 Map 컴포넌트 정리');
       if (mapInstanceRef.current) {
         try {
           mapInstanceRef.current.destroy();
+          console.log('✅ 지도 인스턴스 정리 완료');
         } catch (e) {
-          console.error('지도 정리 실패:', e);
+          console.error('❌ 지도 정리 실패:', e);
         }
       }
     };
