@@ -2,64 +2,36 @@ import React, { useMemo, useState } from "react";
 import { Search as SearchIcon, X } from "lucide-react";
 import PlaceCard from "../components/PlaceCard";
 import PinModal from "../components/PinModal";
-import type { StoreData } from "../data/mockData"; // mock 타입이 있다면 사용
-import store1 from "../assets/store1.png";
-import store2 from "../assets/store2.png";
-import store3 from "../assets/store3.png";
+import { mockStoreData, type StoreData } from "../data/mockData";
 
-const MOCK_PLACES = [
-  {
-    id: "store1",
-    name: "신호등 찜닭",
-    address: "대구 북구 대현동 OO로 12",
-    category: "착한 가격",
-    imageUrl: store1,
-  },
-  {
-    id: "store2",
-    name: "맛있닭 치킨",
-    address: "대구 북구 대현동 OO로 20",
-    category: "친환경",
-    imageUrl: store2,
-  },
-  {
-    id: "store3",
-    name: "썬더 닭강정",
-    address: "대구 북구 대현동 OO로 125",
-    category: "복지 실천",
-    imageUrl: store3,
-  },
-] as const;
+const CATS = ["착한 가격", "친환경", "복지 실천"] as const;
+type Cat = typeof CATS[number];
 
 const normalize = (s: string) => s.toLowerCase().trim();
+const ALL_STORES = Object.values(mockStoreData);
 
 const Search: React.FC = () => {
   const [query, setQuery] = useState("");
+  const [cat, setCat] = useState<Cat | "">("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState<StoreData | undefined>(undefined);
 
-  const results = useMemo(() => {
+  // 검색/카테고리 필터링 (mock에서만 처리)
+  const list = useMemo(() => {
     const q = normalize(query);
-    if (!q) return [];
-    return MOCK_PLACES.filter((p) => {
-      const hay = `${p.name} ${p.address} ${p.category}`.toLowerCase();
-      return hay.includes(q);
-    });
-  }, [query]);
+    let base = ALL_STORES;
 
-  const handleCardClick = (p: typeof MOCK_PLACES[number]) => {
-    // PinModal이 기대하는 StoreData 형태로 매핑
-    const store: StoreData = {
-      id: p.id,
-      name: p.name,
-      address: p.address,
-      category: p.category as "착한 가격" | "친환경" | "복지 실천",
-      imageUrl: p.imageUrl,
-      // 선택: phone, hours, cardNews 등 mock을 여기에 추가 가능
-      // phone: "053-000-0000",
-      // hours: "매일 11:00 ~ 21:00",
-      // cardNews: [{ imageUrl: p.imageUrl, title: "대표메뉴", description: "맛있는 찜닭!" }]
-    };
+    if (cat) base = base.filter((s) => s.category === cat);
+    if (q) {
+      base = base.filter((s) => {
+        const hay = `${s.name} ${s.address} ${s.category}`.toLowerCase();
+        return hay.includes(q);
+      });
+    }
+    return base;
+  }, [query, cat]);
+
+  const handleCardClick = (store: StoreData) => {
     setSelectedStore(store);
     setIsModalOpen(true);
   };
@@ -74,7 +46,7 @@ const Search: React.FC = () => {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="신호등 찜닭"
+            placeholder="가게 이름으로 검색하거나 카테고리를 선택해보세요."
             className="peer h-10 w-full bg-transparent text-[16px] outline-none placeholder:text-gray-800"
             aria-label="가게 검색"
           />
@@ -88,35 +60,49 @@ const Search: React.FC = () => {
             </button>
           )}
         </div>
-        <div className="pb-3" />
+
+        {/* 카테고리 필터 */}
+        <div className="flex gap-2 py-3">
+          <button
+            onClick={() => setCat("")}
+            className={`rounded-full px-3 py-1 text-sm ${cat === "" ? "bg-black text-white" : "bg-gray-100 text-gray-700"}`}
+          >
+            전체
+          </button>
+          {CATS.map((c) => (
+            <button
+              key={c}
+              onClick={() => setCat(c)}
+              className={`rounded-full px-3 py-1 text-sm ${cat === c ? "bg-black text-white" : "bg-gray-100 text-gray-700"}`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* 안내 문구 */}
-      {!query && (
-        <div className="py-16 text-center text-gray-400">
-          가게 이름, 주소, 카테고리로 검색해보세요.
-        </div>
-      )}
+
 
       {/* 결과 리스트 */}
       <div className="divide-y divide-gray-100">
-        {query && results.length === 0 && (
+        {(query || cat) && list.length === 0 && (
           <div className="py-16 text-center text-gray-400">검색 결과가 없어요.</div>
         )}
 
-        {results.map((p) => (
+        {list.map((s) => (
           <PlaceCard
-            key={p.id}
-            name={p.name}
-            address={p.address}
-            category={p.category as "착한 가격" | "친환경" | "복지 실천"}
-            imageUrl={p.imageUrl}
-            onClick={() => handleCardClick(p)}
+            key={s.id}
+            id={s.id}
+            name={s.name}
+            address={s.address}
+            category={s.category}
+            imageUrl={s.heroUrl}
+            onClick={() => handleCardClick(s)}
           />
         ))}
       </div>
 
-      {/* 카드 클릭 시 카드뉴스/상세 모달 */}
+      {/* 상세 모달 */}
       <PinModal
         open={isModalOpen}
         onClose={() => {

@@ -1,60 +1,30 @@
-
 import React, { useState } from "react";
-
 import PlaceCard from "../components/PlaceCard";
 import PinModal from "../components/PinModal";
-import type { StoreData } from "../data/mockData";
+import { mockStoreData, type StoreData } from "../data/mockData";
 
+// 로컬 썸네일을 쓰고 싶으면 아래처럼 별도 매핑 (선택)
 import store1 from "../assets/store1.png";
 import store2 from "../assets/store2.png";
 import store3 from "../assets/store3.png";
 
-// 저장된 가게 더미 데이터 (추후 서버/로컬스토리지 연동)
-const savedPlaces = [
-  {
-    id: "saved1", // id 추가
-    name: "화랑 찜닭",
-    address: "대구 북구 대현동 OO로 12",
-    category: "착한 가격" as const,
-    imageUrl: store1,
-  },
-  {
-    id: "saved2",
-    name: "맛있닭 치킨",
-    address: "대구 북구 대현동 OO로 20",
-    category: "친환경" as const,
-    imageUrl: store2,
-  },
-  {
-    id: "saved3",
-    name: "썬더 닭강정",
-    address: "대구 북구 대현동 OO로 125",
-    category: "복지 실천" as const,
-    imageUrl: store3,
-  },
-];
+// 저장된 가게 id 목록 (임시)
+const savedIds = ["store1", "store2", "store3"] as const;
 
-// PinModal 쪽에서 기대하는 키로 매핑 (mockNewsData, 이미지 매핑과 맞추기)
-const idAlias: Record<string, string> = {
-  saved1: "store1",
-  saved2: "store2",
-  saved3: "store3",
-};
+// 화면에 보여줄 카드 데이터 구성
+const savedPlaces: Array<StoreData & { imageUrl?: string }> = savedIds
+  .map((id) => mockStoreData[id])
+  .map((s, idx) => ({
+    ...s,
+    // PlaceCard는 imageUrl을 쓰고, mock은 heroUrl이므로 매핑
+    imageUrl: [store1, store2, store3][idx] ?? s.heroUrl, // 로컬 이미지 우선, 없으면 heroUrl
+  }));
 
 const SavedList: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState<StoreData | undefined>(undefined);
 
-  const openModalWith = (p: typeof savedPlaces[number]) => {
-    const mappedId = idAlias[p.id] ?? p.id;
-    const store: StoreData = {
-      id: mappedId,                
-      name: p.name,
-      address: p.address,
-      category: p.category,        // "착한 가격" | "친환경" | "복지 실천"
-      imageUrl: p.imageUrl,        
-
-    };
+  const openModalWith = (store: StoreData) => {
     setSelectedStore(store);
     setIsModalOpen(true);
   };
@@ -72,7 +42,7 @@ const SavedList: React.FC = () => {
               name={place.name}
               address={place.address}
               category={place.category}
-              imageUrl={place.imageUrl}
+              imageUrl={place.imageUrl ?? place.heroUrl}
               onClick={() => openModalWith(place)}
             />
           ))}
@@ -81,7 +51,6 @@ const SavedList: React.FC = () => {
         <p className="text-gray-500">저장한 가게가 없습니다.</p>
       )}
 
-      {/* 카드 클릭 시 뜨는 모달 */}
       <PinModal
         open={isModalOpen}
         onClose={() => {
