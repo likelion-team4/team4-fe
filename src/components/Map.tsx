@@ -32,7 +32,6 @@ const Map: React.FC<MapProps> = ({
   const mapInstanceRef = useRef<any>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [stores, setStores] = useState<Store[]>([]);
   const markersRef = useRef<any[]>([]);
 
   // 사용자 위치 가져오기
@@ -84,7 +83,6 @@ const Map: React.FC<MapProps> = ({
         categories: store.categories
       }));
       
-      setStores(stores);
       addStoreMarkers(stores);
       
     } catch (error) {
@@ -93,7 +91,6 @@ const Map: React.FC<MapProps> = ({
       
       // API 실패 시 빈 배열로 설정 (더미 데이터 사용하지 않음)
       console.log('⚠️ API 실패로 인해 가게 데이터를 표시할 수 없습니다.');
-      setStores([]);
       addStoreMarkers([]);
     }
   };

@@ -14,8 +14,7 @@ interface CardNewsData {
   date: string;
 }
 
-const CardNewsPage: React.FC<CardNewsPageProps> = ({ storeId, storeName }) => {
-  const [currentCard, setCurrentCard] = useState(0);
+const CardNewsPage: React.FC<CardNewsPageProps> = ({ storeName }) => {  const [currentCard, setCurrentCard] = useState(0);
   const [cardNews, setCardNews] = useState<CardNewsData[]>([]);
 
   // 더미 카드뉴스 데이터
