@@ -364,7 +364,7 @@ const Map: React.FC<MapProps> = ({
     <div className="relative h-full w-full">
       {isLoading && (
         <div className="absolute inset-0 z-10 grid place-items-center bg-white/90">
-          <div className="rounded-lg bg-green-500 px-5 py-3 text-sm font-medium text-white shadow">
+          <div className="rounded-lg bg-[#00B6F8] px-5 py-3 text-sm font-medium text-white shadow">
             위치 정보를 가져오는 중...
           </div>
         </div>

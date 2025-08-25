@@ -178,7 +178,7 @@ const StoreList: React.FC<StoreListProps> = ({
   // 액티브 스타일 헬퍼
   const catBtn = (active: boolean) =>
     `flex flex-col items-center rounded-xl px-4 py-3 shadow transition
-     ${active ? 'bg-green-500 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`;
+     ${active ? 'bg-[#00B6F8] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}`;
 
   return (
     <div className="px-5 py-5 bg-gray-50">
@@ -256,7 +256,7 @@ const StoreList: React.FC<StoreListProps> = ({
       {/* 로딩 인디케이터 */}
       {loading && (
         <div className="mt-5 flex flex-col items-center justify-center text-gray-500">
-          <div className="mb-2 h-6 w-6 animate-spin rounded-full border-2 border-gray-200 border-t-green-500" />
+          <div className="mb-2 h-6 w-6 animate-spin rounded-full border-2 border-gray-200 border-t-[#00B6F8]" />
           <span className="text-sm">가게 정보를 불러오는 중...</span>
         </div>
       )}
