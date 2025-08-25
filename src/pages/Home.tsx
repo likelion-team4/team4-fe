@@ -26,7 +26,7 @@ const Home: React.FC = () => {
         {
           enableHighAccuracy: true,
           timeout: 10000,
-          maximumAge: 300000 // 5분
+          maximumAge: 300000, // 5분
         }
       );
     });
@@ -38,7 +38,7 @@ const Home: React.FC = () => {
         const location = await getUserLocation();
         setUserLocation(location);
         console.log('사용자 위치:', location);
-      } catch (error) {
+      } catch {
         console.log('위치 정보를 가져올 수 없습니다.');
         setUserLocation(null);
       }
@@ -48,19 +48,19 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <div className="page-content">
-      {/* 지도 컴포넌트 */}
-      <div className="map-section">
-        <Map 
+    <div className="w-full">
+      {/* 지도 영역 */}
+      <div className="w-full h-[50vh] min-h-[300px]">
+        <Map
           center={userLocation || { lat: 37.5665, lng: 126.9780 }}
           zoom={15}
           selectedCategory={selectedCategory}
         />
       </div>
-      
-      {/* 착한가게 목록 컴포넌트 */}
-      <StoreList 
-        userLocation={userLocation || undefined} 
+
+      {/* 착한가게 목록 */}
+      <StoreList
+        userLocation={userLocation || undefined}
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
       />
