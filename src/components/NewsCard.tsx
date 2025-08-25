@@ -1,31 +1,22 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 interface NewsCardProps {
-  id: string;
   title: string;
   content: string;
   postDate: string;
   imageUrl: string;
 }
 
-const NewsCard: React.FC<NewsCardProps> = ({ id, title, content, postDate, imageUrl }) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/news/${id}`);
-  };
+const NewsCard: React.FC<NewsCardProps> = ({ title, content, postDate, imageUrl }) => {
 
   return (
-    <div 
-      onClick={handleClick}
-      className="flex w-full items-center justify-between rounded-none bg-white px-4 py-3 h-36
-                  transition-all duration-200  hover:bg-gray-100 hover:scale-[1.01] cursor-pointer" style={{borderTopColor: "#64748B", borderTopWidth: "1px"}}>
+    <div className="flex items-center justify-between bg-white rounded-none shadow-md w-full h-40 px-15 border-t
+    transition-all duration-300 hover:shadow-lg hover:bg-gray-50 hover:scale-[1.01] cursor-pointer" style={{borderTopColor: "#64748B", borderTopWidth: "2px"}}>
       
       {/* 왼쪽 텍스트 영역 (padding-left 추가) */}
-      <div className="min-w-0 flex-1 text-left">
-        <h1 className="text-[25px] font-extrabold text-gray-900 truncate">{title}</h1>
-        <p className="mt-2 text-[17px] text-gray-500 truncate">{content}</p>
+      <div className="flex-1 min-w-0 text-left">
+        <h1 className="text-[25px] font-bold text-gray-900 whitespace-nowrap w-full">{title}</h1>
+        <p className="text-[17px] text-sm text-gray-500 mt-2 truncate whitespace-nowrap overflow-hidden w-full">{content}</p>
         <div className="flex items-center mt-4 w-50">
           <span className="text-[15px] inline-block text-gray-800 text-xs font-medium py-1 truncate whitespcae-nowrap overflow-hidden w-full">
             {postDate}
@@ -34,7 +25,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ id, title, content, postDate, image
       </div>
 
       {/* 오른쪽 가게 이미지 */}
-      <div className="ml-6 h-28 w-40 flex-shrink-0 translate-x-2">
+      <div className="w-40 h-35 flex-shrink-0 translate-x-10">
         <img
           src={imageUrl}
           alt={title}

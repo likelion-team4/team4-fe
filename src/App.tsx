@@ -4,8 +4,7 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import SavedList from "./pages/SavedList";
 import MyPage from "./pages/MyPage";
-import StoreDetail from "./pages/StoreDetail";
-import CardNewsDetail from "./pages/CardNewsDetail";
+import { DemoStoreDetail } from "./pages/StoreDetail";
 import BadgesPage from "./pages/BadgesPage";
 import Logo from "./assets/logo.png";
 
@@ -73,13 +72,11 @@ export default function App() {
         <main className="main-content">
           <div className="scrollable-content no-scrollbar">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<DemoStoreDetail />} />
               <Route path="/search" element={<Search />} />
               <Route path="/saved" element={<SavedList />} />
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/badges" element={<BadgesPage />} />
-              <Route path="/store/:storeId" element={<StoreDetail />} />
-              <Route path="/news/:newsId" element={<CardNewsDetail />} />
             </Routes>
           </div>
         </main>
