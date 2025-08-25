@@ -178,20 +178,226 @@ body {
 
 /* ===== 페이지 콘텐츠 스타일 ===== */
 .page-content {
+  padding: 0; /* 패딩 제거 */
+  height: 100%; /* 전체 높이 사용 */
+  width: 100%; /* 전체 너비 사용 */
+}
+
+/* ===== 지도 관련 스타일 ===== */
+.map-container {
+  width: 100%;
+  height: 100%; /* 전체 높이 사용 */
+}
+
+.naver-map {
+  width: 100% !important;
+  height: 100% !important; /* 전체 높이 사용 */
+  border: none; /* 테두리 제거 */
+}
+
+/* ===== 로딩 화면 스타일 ===== */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-text {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== 착한가게 목록 스타일 ===== */
+.map-section {
+  height: 50vh; /* 지도는 화면의 절반 높이 */
+  min-height: 300px;
+}
+
+.store-list-container {
   padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.location-info {
+  margin-bottom: 20px;
   text-align: center;
 }
 
-.page-content h2 {
-  color: #1F2937;
-  font-size: 24px;
-  margin-bottom: 16px;
+.location-text {
+  font-size: 18px;
   font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 8px;
 }
 
-.page-content p {
+.location-description {
+  font-size: 14px;
   color: #6B7280;
+}
+
+.category-filters {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.category-item.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.category-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.category-item span {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.stores-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* 스토어 카드 스타일 */
+.store-card {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.store-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.store-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  z-index: 1;
+}
+
+.store-info-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.store-name {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 0;
+}
+
+.store-category-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+}
+
+.store-rating {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  color: white;
+  font-size: 12px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.loading-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  color: #6B7280;
+}
+
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #4CAF50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 8px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.no-more-data {
+  text-align: center;
+  padding: 20px;
+  color: #6B7280;
+  font-size: 14px;
   line-height: 1.6;
 }
 
